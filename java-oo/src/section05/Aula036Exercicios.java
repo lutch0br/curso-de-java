@@ -1,3 +1,4 @@
+package section05;
 
 import java.util.Scanner;
 import java.util.Locale;
