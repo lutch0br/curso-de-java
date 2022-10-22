@@ -9,16 +9,19 @@ public class Aula048Exercicios {
         Scanner sc = new Scanner(System.in).useLocale(Locale.US);
         Locale.setDefault(Locale.US);
 
-        clearScreen();
-        menu:
-        while(true) {             
+        int exercicio;
+
+        clearScreen();        
+        do {             
             System.out.println("Escolha o exercício desejado: ");
-            System.out.printf("%-5s%s\n", "NRO", "DESCRIÇÃO");
+            System.out.printf("\n%-5s%s\n", "NRO", "DESCRIÇÃO");
             System.out.printf("%3d  %s\n", 1, "Senha");
             System.out.printf("%3d  %s\n", 2, "Coordenadas");
             System.out.printf("%3d  %s\n", 3, "Combustível");
             System.out.printf("%3d  %s\n", 0, "Fim");
-            int exercicio = sc.nextInt();
+
+            exercicio = sc.nextInt();
+
             switch(exercicio){                
                 case 1:
                     clearScreen();
@@ -32,11 +35,11 @@ public class Aula048Exercicios {
                     clearScreen();
                     exercicio03(sc);                    
                     break;      
-                 case 0: break menu;
-                default: System.out.println("Opção inválida");
-                
+                case 0: break;
+                default: System.out.println("Opção inválida");                
             }
-        }
+        } while(exercicio != 0);
+
         sc.close();
         clearScreen();
         System.out.println("Concluído");
@@ -54,18 +57,18 @@ public class Aula048Exercicios {
         String input = "";
 
         sc.nextLine();
-        System.out.println("Digite a senha: ");
+        System.out.printf("Digite a senha: ");
         input = sc.nextLine();
 
         while(!(input.equals(passwd))){
             clearScreen();
             System.out.println("Senha inválida");
-            System.out.println("Digite a senha: ");
+            System.out.printf("Digite a senha: ");
             input = sc.nextLine();
         }
 
         clearScreen();
-        System.out.println("Acesso permitido");        
+        System.out.println("Acesso permitido\n");        
     }
 
     /**
@@ -87,6 +90,8 @@ public class Aula048Exercicios {
             x = sc.nextInt();
             y = sc.nextInt();            
         }
+
+        System.out.println();
     }
 
     /**
