@@ -1,9 +1,9 @@
 package section07;
 
 import java.util.Vector;
-import util.Util;
+import util.Screen;
 
-public class TestStrings{
+public class Aula058Strings{
     public static void main(String...args){
 
         String word = " Curso de Java ";
@@ -19,7 +19,7 @@ public class TestStrings{
         String w9 = String.valueOf(word.indexOf("a", 13));
         String[] w0 = word.split(" ");
 
-        Util.clearScreen();
+        Screen.clear();
         System.out.printf("%-20s %-20s %s\n", 
             "ORIGINAL", "FUNCÃO", "CONVERTIDA");
         show(word, "toLowerCase", w1);
