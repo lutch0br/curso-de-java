@@ -52,6 +52,13 @@ public class Application {
 
         System.out.printf("%s\n", LocalDate.parse("2022-02-20").format(dtf01));
 
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        System.out.printf("LocalDate formatado: %s\n", 
+            LocalDate.parse("2022-02-20").format(dtf));
+        String d100 = DateTimeFormatter.ofPattern("dd/MM/yyyy").format(d01);
+        System.out.printf("Hoje: %s\n", d100);
+
+
         DateTimeFormatter dtf03 = DateTimeFormatter
             .ofPattern("dd/MM/yyyy HH:mm")
             .withZone(ZoneId.systemDefault());
