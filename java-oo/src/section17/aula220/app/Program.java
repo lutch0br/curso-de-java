@@ -18,9 +18,8 @@ import util.Screen;
 /**
 * Programa que exibe um menu com opções para criar um arquivo no formato csv com
 * produtos contendo nome, preço e quantidade.
-* Permite ainda exibir os produtos, calcular seus produtos, salvando o valor 
-* total e um novo arquivo. 
-* Oferece ainda a opção de apagar esses arquivos.
+* Exibe os produtos, calcular seus valores totais, salvando o valor total e um 
+* novo arquivo.
 * Atualmente implementado com a seleção automática das opções.
 */
 public class Program {
