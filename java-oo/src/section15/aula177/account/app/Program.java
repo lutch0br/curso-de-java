@@ -25,7 +25,7 @@ public class Program {
             Account account = getAccount();
             double withdrawAmount = faker.number().randomDouble(2, 1000, 10000);
 
-            System.out.println("");
+            System.out.println();
             System.out.printf("Enter the ammount for withdraw: $ %.2f\n", 
                 withdrawAmount);
             account.withdraw(withdrawAmount);
@@ -36,7 +36,7 @@ public class Program {
         } catch(NotEnoughBalanceException e) {
             System.out.printf("%s\n", e.getMessage());
         } finally {
-            System.out.println("");  
+            System.out.println();  
             System.out.println("Thank you!");
         }
         
