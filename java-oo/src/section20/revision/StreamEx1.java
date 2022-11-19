@@ -30,20 +30,7 @@ public class StreamEx1 {
         Screen.clear();
         write();
         read();
-
-    }
-
-    static void write(){
-        try(BufferedWriter bw = new BufferedWriter(new FileWriter(file))){
-            List<Product> products = getProducts(10);
-
-            for(Product p : products){
-                bw.write(p.toString());
-                bw.newLine();
-            }
-        } catch(IOException e){
-            System.out.printf("%s\n", e.getMessage());
-        }
+        delete();
     }
 
     static List<Product> getProducts(int quantity){
@@ -57,7 +44,14 @@ public class StreamEx1 {
         }
 
         return products;
-    }    
+    }
+
+    static void write() throws IOException {        
+        Files.write(file.toPath(), getProducts(10)
+            .stream()
+            .map(p -> p.toString())
+            .collect(Collectors.toList()));
+    }
 
     static void delete(){}
 
@@ -68,7 +62,7 @@ public class StreamEx1 {
     }
 }
 
-class Product{
+class Product {
     static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     String name;
     Double price;
