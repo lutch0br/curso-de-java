@@ -10,6 +10,7 @@ import util.Screen;
 
 
 public class Application {
+    
     static Scanner sc = new Scanner(System.in);
 
     public static void main(String...args){
@@ -46,4 +47,6 @@ public class Application {
         System.out.println();
         sc.close();
     }
+
+
 }
