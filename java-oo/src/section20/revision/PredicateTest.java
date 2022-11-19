@@ -23,17 +23,24 @@ public class PredicateTest {
     public static void main(String...args){
         Screen.clear();
         List<Person> persons = getPersons(20);
-
+        
+        System.out.println("Original list");
         persons.forEach(System.out::println);
 
         System.out.println("-------");
+        System.out.println("Lambda");
         persons.removeIf(p -> p.age > 40); 
         persons.forEach(System.out::println);
+
+        System.out.println("-------");
+        System.out.println("method filteredList1");
+        filteredList1(persons, new MyPredicate());
 
         System.out.println("-------");
         System.out.println("With class Predicate");
         persons.removeIf(new MyPredicate()); 
         persons.forEach(System.out::println);        
+
     }
 
     static List<Person> getPersons(int quantity){
@@ -48,10 +55,31 @@ public class PredicateTest {
         return persons;
     }
 
+    static void filteredList(List<Person> persons){
+        ArrayList<Person> l = (ArrayList)((ArrayList)persons).clone();
+        l.removeIf(new MyPredicate());
+
+        l.forEach(System.out::println);
+    }
+
+    static void filteredList1(List<Person> persons, MyPredicate<Person> criteria){
+        ArrayList<Person> l = (ArrayList)((ArrayList)persons).clone();
+        l.removeIf(criteria);
+
+        l.forEach(System.out::println);
+    }    
+
+    static void filteredList2(List<Person> persons, Predicate<Person> criteria){
+        ArrayList<Person> l = (ArrayList)((ArrayList)persons).clone();
+        l.removeIf(criteria);
+
+        l.forEach(System.out::println);
+    }     
+
 }
 
 class Person{
-    static final SimpleDateFormat sdf= new SimpleDateFormat("dd/MM/yyyy");
+    static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     String name;
     Integer age;
     Date birth;
@@ -75,9 +103,10 @@ class Person{
     }
 } 
 
-class MyPredicate implements Predicate<Person>{
+class MyPredicate<T> implements Predicate<Person>{
     @Override
     public boolean test(Person p){
+        System.out.printf("Verifing person ... %s, %s\n", p, p.age > 30);
         return  p.age > 30;
     }
 }
