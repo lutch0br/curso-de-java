@@ -1,10 +1,9 @@
 package section20.revision;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Comparator;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 import com.github.javafaker.Faker;
@@ -13,14 +12,38 @@ import util.Screen;
 /**
 * Revisão da utilização da classe Comparable
 */
-public class ComparableTest {
+public class ComparatorTest {
 
     final static Faker faker = new Faker();
 
     public static void main(String...args){
         Screen.clear();
         List<Person> persons = getPersons(20);
-        Collections.sort(persons);
+
+        persons.sort(new MyComparatorByBirth());
+        persons.forEach(System.out::println);
+
+        Comparator<Person> comp = new Comparator<Person>(){
+            @Override
+            public int compare(Person p1, Person p2){
+            
+                if (p1.birth.after(p2.birth)){
+                    return -1;
+                }
+                if (p1.birth.before(p2.birth)){
+                    return 1;
+                }
+
+                return 0;
+            }
+        };
+
+        System.out.println("-------");
+        persons.sort(comp); 
+        persons.forEach(System.out::println);
+
+        System.out.println("-------");
+        persons.sort((p1, p2) -> p1.name.compareTo(p2.name)); 
         persons.forEach(System.out::println);
     }
 
@@ -38,7 +61,7 @@ public class ComparableTest {
 
 }
 
-class Person implements Comparable<Person>{
+class Person{
     String name;
     Integer age;
     Date birth;
@@ -55,23 +78,23 @@ class Person implements Comparable<Person>{
         return (int) (diff / (1000L * 60 * 60 * 24 * 365));
     }
 
-    @Override
-    public int compareTo(Person p){
-        int compValue = 0;
-
-        if (birth.after(p.birth)){
-            compValue =  -1;
-        }
-        else if (birth.before(p.birth)){
-            compValue =  1;
-        }else {
-            compValue =  0;
-        }
-
-        return compValue;
-    }
-
     public String toString(){
         return String.format("%s, %s, %d", name, birth, age);
     }
 } 
+
+
+class MyComparatorByBirth implements Comparator<Person> 
+{
+    @Override
+    public int compare(Person p1, Person p2)
+    {    
+        if (p1.birth.after(p2.birth)){
+            return -1;
+        }
+        if (p1.birth.before(p2.birth)){
+            return 1;
+        }
+        return 0;
+    }
+}

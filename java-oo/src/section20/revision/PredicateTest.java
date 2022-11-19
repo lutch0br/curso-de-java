@@ -1,27 +1,39 @@
 package section20.revision;
 
-import java.util.Collections;
+
+import java.text.SimpleDateFormat;
+
 import java.util.Date;
 import java.util.List;
+import java.util.Comparator;
+import java.util.function.Predicate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 import com.github.javafaker.Faker;
 import util.Screen;
 
 /**
-* Revisão da utilização da classe Comparable
+* Revisão da utilização da classe Predicate
 */
-public class ComparableTest {
+public class PredicateTest {
 
     final static Faker faker = new Faker();
 
     public static void main(String...args){
         Screen.clear();
         List<Person> persons = getPersons(20);
-        Collections.sort(persons);
+
         persons.forEach(System.out::println);
+
+        System.out.println("-------");
+        persons.removeIf(p -> p.age > 40); 
+        persons.forEach(System.out::println);
+
+        System.out.println("-------");
+        System.out.println("With class Predicate");
+        persons.removeIf(new MyPredicate()); 
+        persons.forEach(System.out::println);        
     }
 
     static List<Person> getPersons(int quantity){
@@ -38,7 +50,8 @@ public class ComparableTest {
 
 }
 
-class Person implements Comparable<Person>{
+class Person{
+    static final SimpleDateFormat sdf= new SimpleDateFormat("dd/MM/yyyy");
     String name;
     Integer age;
     Date birth;
@@ -55,23 +68,16 @@ class Person implements Comparable<Person>{
         return (int) (diff / (1000L * 60 * 60 * 24 * 365));
     }
 
-    @Override
-    public int compareTo(Person p){
-        int compValue = 0;
-
-        if (birth.after(p.birth)){
-            compValue =  -1;
-        }
-        else if (birth.before(p.birth)){
-            compValue =  1;
-        }else {
-            compValue =  0;
-        }
-
-        return compValue;
-    }
-
     public String toString(){
-        return String.format("%s, %s, %d", name, birth, age);
+        String birthSTR = sdf.format(birth);
+
+        return String.format("%-25s %s %d", name, birthSTR, age);
     }
 } 
+
+class MyPredicate implements Predicate<Person>{
+    @Override
+    public boolean test(Person p){
+        return  p.age > 30;
+    }
+}
