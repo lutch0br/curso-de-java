@@ -8,7 +8,9 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import com.github.javafaker.Faker;
-import section21.aula268.db.DB;
+import section21.aula268.database.DB;
+import section21.aula268.database.DbIntegrityException;
+import section21.aula268.database.DbException;
 import util.Screen;
 
 
@@ -20,14 +22,17 @@ public class Program {
         Screen.clear();
 
         try(Connection conn = DB.getConnection()){                 
-            queryDepartment(conn);
-            System.out.println("----------");
+            // queryDepartment(conn);
+            // System.out.println("----------");
             querySeller(conn);
             System.out.println("----------");
-            for (int i = 0; i < 3; i++)
-                insertSellerWithGeneratedKeys(conn);
-            System.out.println("----------");
-            queryDepartment(conn);
+            testTransaction(conn);
+            // deleteSeller(conn);
+            // updateSeller(conn);
+            // for (int i = 0; i < 3; i++)
+            //     insertSellerWithGeneratedKeys(conn);
+            // System.out.println("----------");
+            // queryDepartment(conn);
             System.out.println("----------");
             querySeller(conn);    
         } catch (SQLException e) {
@@ -142,5 +147,123 @@ public class Program {
             DB.closeStatement(st);
             DB.closeResultSet(rs);           
         }
-    }    
+    } 
+
+    static void updateSeller(Connection conn){
+
+        PreparedStatement st = null;
+
+        try {
+            st = conn.prepareStatement(
+                "UPDATE SELLER "
+                + "SET BASESALARY = ? "
+                + "WHERE "
+                + "DEPARTMENTID = ?");
+
+            st.setDouble(1, faker.number().randomDouble(2, 1000, 10000));
+            st.setInt(2, 1);
+
+            int rowsAffected = st.executeUpdate();
+            System.out.printf("Done! rows affected %d\n", rowsAffected);
+
+        } catch (SQLException e){
+            e.printStackTrace();
+        } finally {
+            DB.closeStatement(st);
+        }
+    }   
+
+    static void deleteSeller(Connection conn){
+
+        PreparedStatement st = null;
+
+        try {
+            st = conn.prepareStatement(
+                "DELETE FROM SELLER "
+                + "WHERE "
+                + "ID = ?");
+
+            st.setInt(1, 80);
+
+            int rowsAffected = st.executeUpdate();
+            System.out.printf("Done! rows affected %d\n", rowsAffected);
+
+        } catch (SQLException e){
+            e.printStackTrace();
+        } finally {
+            DB.closeStatement(st);
+        }
+    } 
+
+    static void deleteDepartment(Connection conn){
+
+        PreparedStatement st = null;
+
+        try {
+            st = conn.prepareStatement(
+                "DELETE FROM DEPARTMENT "
+                + "WHERE "
+                + "ID = ?");
+
+            st.setInt(1, 80);
+
+            int rowsAffected = st.executeUpdate();
+            System.out.printf("Done! rows affected %d\n", rowsAffected);
+
+        } catch (SQLException e){
+            e.printStackTrace();
+        } catch (DbException e){
+            e.printStackTrace();
+        } finally {
+            DB.closeStatement(st);
+        }
+    } 
+
+    static void testTransaction(Connection conn){
+
+        Statement st = null;
+
+        try {
+            st = conn.createStatement();
+
+            conn.setAutoCommit(false);
+
+            int rowsAffected1 = st.executeUpdate(
+                "UPDATE SELLER "
+                + "SET BASESALARY = 5000.0 "
+                + "WHERE "
+                + "DEPARTMENTID = 1"
+            );
+
+            int i = 1;
+
+            if (i < 2)
+                throw new SQLException("Test Exception");
+
+            st = conn.createStatement();
+
+            int rowsAffected2 = st.executeUpdate(
+                "UPDATE SELLER "
+                + "SET BASESALARY = 3000.0 "
+                + "WHERE "
+                + "DEPARTMENTID = 2"
+            );
+
+            conn.commit();
+
+            System.out.printf("st1:  %d,  st2: %d\n", 
+                rowsAffected1, rowsAffected2);
+
+        } catch (SQLException e){
+            try{
+                conn.rollback();
+                throw new DbException("Transaction rolled back " + e.getMessage());                
+            } catch (SQLException e1) {
+                throw new DbException("Other Exception: " + e1.getMessage());
+            }        
+        } finally {
+            DB.closeStatement(st);
+        }
+    } 
+               
 }
