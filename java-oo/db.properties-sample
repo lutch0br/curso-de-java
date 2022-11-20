@@ -1,0 +1,4 @@
+user=user
+password=passwd
+dburl=jdbc:database://localhost:port/databasename
+useSSL=false
