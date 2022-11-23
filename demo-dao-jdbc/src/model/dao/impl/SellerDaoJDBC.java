@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.github.javafaker.Faker;
+
 import db.DB;
 import db.DbException;
 import model.dao.SellerDao;
@@ -18,6 +20,7 @@ import model.entities.Seller;
 public class SellerDaoJDBC implements SellerDao{
 
 	private Connection conn = null;
+	private Faker faker = new Faker();
 	
 	public SellerDaoJDBC(Connection conn) {
 		this.conn = conn;
@@ -25,19 +28,85 @@ public class SellerDaoJDBC implements SellerDao{
 	
 	@Override
 	public void insert(Seller obj) {
-		// TODO Auto-generated method stub
+		PreparedStatement st = null;
+		ResultSet rs = null;
 		
+		try {
+			st = conn.prepareStatement(
+					"INSERT INTO SELLER "
+					+ "(NAME, EMAIL, BIRTHDATE, BASESALARY, DEPARTMENTID) "
+					+ "VALUES "
+					+ "(?, ?, ?, ?, ?)"
+					);
+
+			st.setString(1, obj.getName());
+			st.setString(2, obj.getEmail());
+			st.setDate(3, new java.sql.Date(obj.getBirthDate().getTime()));
+			st.setDouble(4, obj.getBaseSalary());
+			st.setInt(5, faker.number().numberBetween(1, 5));
+			
+			int rowsAffected = st.executeUpdate();
+			
+			if (rowsAffected > 0) {
+				System.out.printf("%d rows affected\n", rowsAffected);
+			}
+					
+		} catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		} finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}	
 	}
 
 	@Override
 	public void update(Seller obj) {
-		// TODO Auto-generated method stub
-		
+		PreparedStatement st = null;
+		ResultSet rs = null;
+				
+			try {
+				st = conn.prepareStatement(
+					"UPDATE SELLER " 
+					+ "SET NAME = ?, EMAIL = ?, BIRTHDATE = ?, BASESALARY = ?, "
+					+ "DEPARTMENTID = ?"
+					+ "WHERE ID = ?"
+					);
+				
+				st.setString(1, obj.getName());
+				st.setString(2, obj.getEmail());
+				st.setDate(3, new java.sql.Date(obj.getBirthDate().getTime()));
+				st.setDouble(4, obj.getBaseSalary());
+				st.setInt(5, obj.getDepartment().getId());
+				st.setInt(6, obj.getId());
+				
+				int rowsAffected = st.executeUpdate();
+				
+				System.out.printf("%d rows affected.", rowsAffected);				
+				
+			} catch (SQLException e) {
+				throw new DbException(e.getMessage());
+			}finally {
+				DB.closeStatement(st);
+				DB.closeResultSet(rs);
+			}		
 	}
 
 	@Override
 	public void delete(Integer id) {
-		// TODO Auto-generated method stub
+		PreparedStatement st = null;
+		ResultSet rs = null;
+				
+		try {
+			st = conn.prepareStatement("DELETE FROM SELLER WHERE ID = ?");			
+			st.setInt(1, id);
+			st.executeUpdate();			
+			
+		}catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		} finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}
 		
 	}
 
@@ -175,10 +244,9 @@ public class SellerDaoJDBC implements SellerDao{
 	}
 
 	private Department instantiateDepartment(ResultSet rs) throws SQLException {
-		Department d = new Department();
-		
-		d.setId(rs.getInt("ID"));
-		d.setName(rs.getString("NAME"));
+		Department d = new Department();		
+		d.setId(rs.getInt("DEPARTMENTID"));
+		d.setName(rs.getString("DEPNAME"));
 		
 		return d;
 	}
@@ -189,8 +257,7 @@ public class SellerDaoJDBC implements SellerDao{
 		seller.setName(rs.getString("NAME"));
 		seller.setEmail(rs.getString("EMAIL"));
 		seller.setBirthDate(rs.getDate("BIRTHDATE"));
-		seller.setBaseSalary(rs.getDouble("BASESALARY"));
-		seller.setName(rs.getString("NAME"));		
+		seller.setBaseSalary(rs.getDouble("BASESALARY"));		
 		seller.setDepartment(dep);
 		
 		return seller;
