@@ -34,7 +34,7 @@ public class Program {
 
 		System.out.println("=== Test 2: delete  ===");
 		depDAO.findAll().forEach(System.out::println);
-		// depDAO.delete(1);
+		depDAO.delete(12);
 		System.out.println();		
 		
 		System.out.println("=== Test 3: findAll ===");
