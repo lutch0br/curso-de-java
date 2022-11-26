@@ -14,6 +14,17 @@ public class ProgramAdd {
 		int sum = number1 + number2;
 		
 		JOptionPane.showMessageDialog(null, "The sum is " + sum, "Sum of two integers", JOptionPane.PLAIN_MESSAGE);
+		testandoJOptionPanes(JOptionPane.ERROR_MESSAGE);
+		testandoJOptionPanes(JOptionPane.INFORMATION_MESSAGE);
+		testandoJOptionPanes(JOptionPane.WARNING_MESSAGE);
+		testandoJOptionPanes(JOptionPane.QUESTION_MESSAGE);
+		
+	}
+	
+	static void testandoJOptionPanes(int message) {
+		
+		JOptionPane.showMessageDialog(null, "Teste 1", "Title", message);
+		
 	}
 
 }

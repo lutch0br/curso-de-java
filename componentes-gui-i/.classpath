@@ -5,6 +5,8 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Java Faker "/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Lombok Project"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
