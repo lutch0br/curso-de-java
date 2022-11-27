@@ -5,3 +5,5 @@
 *.properties
 db/
 assets/
+temp/
+loja-virtual-view-repository/
