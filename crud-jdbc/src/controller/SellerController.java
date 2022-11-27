@@ -28,4 +28,8 @@ public class SellerController {
 	public void insert(Seller seller) {
 		sellerDao.insert(seller);
 	}
+	
+	public void update(Seller seller) {
+		sellerDao.update(seller);
+	}
 }

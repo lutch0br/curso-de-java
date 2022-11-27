@@ -29,4 +29,8 @@ public class DepartmentController {
 		departmentDao.delete(id);
 	}
 	
+	public Department findByName(String name) {
+		return departmentDao.findByName(name);
+	}
+	
 }

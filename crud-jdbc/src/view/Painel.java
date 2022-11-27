@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -147,53 +148,59 @@ public class Painel extends JFrame {
 			}
 		});
 
-//		botarApagar.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				deletar();
-//				limparTabela();
-//				preencherTabela();
-//			}
-//		});
-//
-//		botaoEditar.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				alterar();
-//				limparTabela();
-//				preencherTabela();
-//			}
-//		});
+		btnDelete.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				delete();
+				clearTable();
+				fillTable();
+			}
+		});
+
+		btnEdit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				edit();
+				clearTable();
+				fillTable();
+			}
+		});
 	}
 
 	private void clearTable() {
 		model.getDataVector().clear();
 	}
 
-//	private void alterar() {
-//		Object objetoDaLinha = (Object) modelo.getValueAt(tabela.getSelectedRow(), tabela.getSelectedColumn());
-//		if (objetoDaLinha instanceof Integer) {
-//			Integer id = (Integer) objetoDaLinha;
-//			String nome = (String) modelo.getValueAt(tabela.getSelectedRow(), 1);
-//			String descricao = (String) modelo.getValueAt(tabela.getSelectedRow(), 2);
-//			this.produtoController.alterar(nome, descricao, id);
-//		} else {
-//			JOptionPane.showMessageDialog(this, "Por favor, selecionar o ID");
-//		}
-//	}
-//
-//	private void deletar() {
-//		Object objetoDaLinha = (Object) modelo.getValueAt(tabela.getSelectedRow(), tabela.getSelectedColumn());
-//		if (objetoDaLinha instanceof Integer) {
-//			Integer id = (Integer) objetoDaLinha;
-//			this.produtoController.deletar(id);
-//			modelo.removeRow(tabela.getSelectedRow());
-//			JOptionPane.showMessageDialog(this, "Item exclu�do com sucesso!");
-//		} else {
-//			JOptionPane.showMessageDialog(this, "Por favor, selecionar o ID");
-//		}
-//	}
-//
+	private void edit() {
+		Object objectFromLine = (Object) model.getValueAt(table.getSelectedRow(), table.getSelectedColumn());
+		if (objectFromLine instanceof Integer) {
+			Integer id = (Integer) objectFromLine;
+			String name = (String) model.getValueAt(table.getSelectedRow(), 1);
+			String email = (String) model.getValueAt(table.getSelectedRow(), 2);
+			Date birthDate = (Date) model.getValueAt(table.getSelectedRow(), 3);
+			Double baseSalary = (Double) model.getValueAt(table.getSelectedRow(), 4);
+			String departmentName = (String) model.getValueAt(table.getSelectedRow(), 5);
+			Department department = departmentController.findByName(departmentName);
+			Seller seller = new Seller(id, name, email, birthDate, baseSalary, department);
+			this.sellerController.update(seller);
+			JOptionPane.showMessageDialog(this, "Success!");
+		} else {
+			JOptionPane.showMessageDialog(this, "Por favor, selecionar o ID");
+		}
+	}
+
+	private void delete() {
+		Object objectFromLine = (Object) model.getValueAt(table.getSelectedRow(), table.getSelectedColumn());
+		if (objectFromLine instanceof Integer) {
+			Integer id = (Integer) objectFromLine;
+			this.sellerController.delete(id);
+			model.removeRow(table.getSelectedRow());
+			JOptionPane.showMessageDialog(this, "Success!");
+		} else {
+			JOptionPane.showMessageDialog(this, "Please, select an ID");
+		}
+	}
+
 	private void fillTable() {
 		List<Seller> sellers = listSeller();
 		try {
