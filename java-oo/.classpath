@@ -8,6 +8,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Apache Derby DB"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Java Faker"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Lombok"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Apache Derby"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="libs/jar_files/commons-lang3-3.5.jar"/>
 	<classpathentry kind="lib" path="libs/jar_files/generex-1.0.2.jar"/>

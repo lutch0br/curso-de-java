@@ -4,7 +4,7 @@ import javax.swing.JFrame;
 
 import view.Painel;
 
-public class Program {
+public class ProgramGUI {
 
 	public static void main(String[] args) {
 		Painel frame = new Painel();
